@@ -1,3 +1,5 @@
+
+
 let routes = [
   {
     // path:'/',
@@ -48,7 +50,8 @@ function createRoute(arr) {
     // 去除component的index, 一下name和path都是根据component进行动态生成,如果代码中已经包含name和path,则以代码中的name和path为准.
     let val = getValue(arr[i].component)
     // 生成name, /替换成_. ||前面表示如果用户配置了name,则不需要额外生成
-    arr.name = arr[i].name || val.replace(/\//g,"_")
+    arr[i].name = arr[i].name || val.replace(/\//g,"_")
+    console.log(arr[i].name)
     // 生成path, component前面加一个/, ||前面表示如果用户配置了path,则不需要额外生成
     arr[i].path = arr[i].path || `/${val}`
     let componentFun = import(`../../views/${arr[i].component}.vue`)
