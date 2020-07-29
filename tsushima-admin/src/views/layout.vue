@@ -7,17 +7,15 @@
         <a class="h5 text-light mb-0 mr-auto">UNI-ADMIN</a>
 
           <el-menu
-            :default-active="navBarIndex"
+            :default-active="navBar.active"
             mode="horizontal"
             @select="handleSelect"
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-            <el-menu-item index="1">首页</el-menu-item>
-            <el-menu-item index="2">商品</el-menu-item>
-            <el-menu-item index="3">订单</el-menu-item>
-            <el-menu-item index="4">会员</el-menu-item>
-            <el-menu-item index="5">设置</el-menu-item>
+            <!-- 使用过滤器将index转换为string类型,这边框架需要用string类型的index才能被使用 -->
+            <el-menu-item :index="index|numToString" v-for="(item, index) in navBar.list" :key="index">{{item.name}}</el-menu-item>
+
             <!-- 带子目录的tab -->
             <el-submenu index="100">
               <template slot="title">
@@ -32,7 +30,13 @@
       <el-container style="height:100%; padding-bottom:60px">
         <el-aside width="200px">
           <!-- 侧边栏 -->
-          <li v-for="i in 100" :key="i">{{i}}</li>
+          <!-- <li v-for="i in 100" :key="i">{{i}}</li> -->
+          <el-menu default-active="2" @select="slideSelect">
+            <el-menu-item :index="index|numToString" v-for="(item, index) in slideMenus" :key="index">
+              <i :class="item.icon"></i>
+              <span slot="title">{{item.name}}</span>
+            </el-menu-item>
+          </el-menu>
         </el-aside>
         <el-main>
           <!-- 主内容 -->
@@ -46,17 +50,74 @@
 </template>
 
 <script>
+// common为一些通用的方法,比如numToString
+  import common from "@/common/mixins/common"
   export default {
+    // mixins为关键字
+    mixins:[common],
     data() {
       return {
         navBarIndex: '1',
+        navBar: {
+          active: "0",
+          list: [
+            // 每个分栏下的子页
+            { 
+              name: "首页",
+              subActive: "0",
+              submenu: [
+                {
+                  //element查询 icon 图标库
+                  icon: "el-icon-s-home",
+                  name:"后台首页"
+                },
+                {
+                  icon: "el-icon-s-claim",
+                  name: "商品列表"
+                }
+              ] 
+              
+              },
+            { 
+              name: "商品", 
+              subActive: "0",
+              submenu:[
+                {
+                  icon: "el-icon-s-claim",
+                  name: "商品列表"
+                }
+              ]
+            },
+            { name: "订单" },
+            { name: "会员" },
+            { name: "设置" },
+          ]
+        },
         circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
         size: "small"
       }
     },
+    computed: {
+      slideMenuActive() {
+        return this.navBar.list[this.navBar.active].subActive
+      },
+      slideMenus() {
+        // 获取侧边栏的submenu, 不存在就返回[]
+        return this.navBar.list[this.navBar.active].submenu || []
+      }
+    },
+
     methods: {
+      // 顶部点击 控制台打印输出
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+        // navbar点击后更新active的值,然后让sildebar根据active得到对应的子栏
+        this.navBar.active = key
+      },
+      // 侧边栏点击,控制台输出内容
+      slideSelect(key, keyPath) {
+        console.log(key, keyPath)
+        this.navBar.list[this.navBar.active].subActive = key
       }
     }
   }
