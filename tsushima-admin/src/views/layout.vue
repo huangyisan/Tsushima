@@ -32,7 +32,7 @@
         <el-aside width="200px">
           <!-- 侧边栏 -->
           <!-- <li v-for="i in 100" :key="i">{{i}}</li> -->
-          <el-menu default-active="2" @select="slideSelect" style="height:100%">
+          <el-menu default-active="0" @select="slideSelect" style="height:100%">
             <el-menu-item :index="index|numToString" v-for="(item, index) in slideMenus" :key="index">
               <i :class="item.icon"></i>
               <span slot="title">{{item.name}}</span>
@@ -41,13 +41,14 @@
         </el-aside>
         <el-main>
           <!-- 面包屑导航 -->
-          <div class="border-bottom">
+          <div class="border-bottom" v-if="bran.length > 0">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="padding-bottom:20px;">
               <el-breadcrumb-item v-for="(item, index) in bran" :key=index :to="{ path: item.path }">{{item.title}}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <!-- 主内容 -->
           <li v-for="i in 2" :key="i">{{i}}</li>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -74,11 +75,13 @@
     created() {
       this.navBar = this.$conf.navBar
       this.getRouterBran()
+      //初始化选中菜单
+      this.__initNavBar()
     },
     computed: {
+      // 当前活跃的状态的slidemenu
       slideMenuActive: {
         set(val) {
-          console.log(val)
           this.navBar.list[this.navBar.active].subActive = val
         },
         get() {
@@ -92,16 +95,42 @@
         return this.navBar.list[this.navBar.active].submenu || []
       }
     },
+    watch: {
+      '$route'(to, from) {
+        // console.log(to)
+        // console.log(from)
+        // 当路由跳转的时候进行本地存储
+        localStorage.setItem('navActive', JSON.stringify({
+          // 记录顶栏激活的信息
+          top: this.navBar.active,
+          // 记录侧栏激活的信息
+          left: this.slideMenuActive
+        }))
+        this.getRouterBran()
+
+      }
+    },
 
     methods: {
+      //初始化时候载入使用的页面信息
+      __initNavBar() {
+        let r = localStorage.getItem('navActive')
+        console.log(`sdfsdf{r}`)
+        if (r) {
+          r = JSON.parse(r)
+          
+          this.navBar.active = r.top
+          this.slideMenuActive = r.left
+          console.log(this.navBar.active)
+          console.log( this.slideMenuActive)
+        }
+      },
       // 获取面包屑导航
       getRouterBran() {
         // 过滤出带name的内容,从路由里面获取内容信息
         let b = this.$route.matched.filter(v=>v.name)
         let arr = []
         b.forEach((v,k)=> {
-          console.log(k)
-          console.log(v)
           // 过滤layout和index 这个页面不去显示面包屑导航
           if (v.name === "index" || v.name === "layout") return
           arr.push({
@@ -120,18 +149,28 @@
           })
         }
         this.bran = arr
-        console.log(arr)
       },
       // 顶部点击 控制台打印输出
       handleSelect(key, keyPath) {
-        console.log(key, keyPath);
         // navbar点击后更新active的值,然后让sildebar根据active得到对应的子栏
         this.navBar.active = key
+        // 点击后跳转到激活的左栏第0个
+        // 当侧边存在目录的时候,才执行
+        if(this.slideMenus.length >0 ) {
+          this.$router.push({
+            
+            name: this.slideMenus[0].pathname
+          })
+        }
       },
       // 侧边栏点击,控制台输出内容
       slideSelect(key, keyPath) {
-        console.log(key, keyPath)
         this.slideMenuActive = key
+        // 然后跳转到对应的页面
+        this.$router.push({
+          name: this.slideMenus[key].pathname
+        })
+        console.log(this.slideMenus[key].pathname)
       }
     }
   }
