@@ -27,11 +27,12 @@
           </el-menu>
       </el-header>
       <!-- header占了60px,所以侧边栏被占用了60px, 底部给padding-bottom 60px,  height:100%是给滚动效果 -->
-      <el-container style="height:100%; padding-bottom:60px">
+      <!-- <el-container style="height:100%; padding-bottom:60px;"> -->
+      <el-container style="height:100%;">
         <el-aside width="200px">
           <!-- 侧边栏 -->
           <!-- <li v-for="i in 100" :key="i">{{i}}</li> -->
-          <el-menu default-active="2" @select="slideSelect">
+          <el-menu default-active="2" @select="slideSelect" style="height:100%">
             <el-menu-item :index="index|numToString" v-for="(item, index) in slideMenus" :key="index">
               <i :class="item.icon"></i>
               <span slot="title">{{item.name}}</span>
@@ -39,8 +40,14 @@
           </el-menu>
         </el-aside>
         <el-main>
+          <!-- 面包屑导航 -->
+          <div class="border-bottom">
+            <el-breadcrumb separator-class="el-icon-arrow-right" style="padding-bottom:20px;">
+              <el-breadcrumb-item v-for="(item, index) in bran" :key=index :to="{ path: item.path }">{{item.title}}</el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
           <!-- 主内容 -->
-          <li v-for="i in 100" :key="i">{{i}}</li>
+          <li v-for="i in 2" :key="i">{{i}}</li>
         </el-main>
       </el-container>
     </el-container>
@@ -58,6 +65,7 @@
     data() {
       return {
         navBar:[],
+        bran: [],
         circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
         size: "small"
       }
@@ -65,6 +73,7 @@
     // 页面启动创建的时候,将conf中的navBar信息加载
     created() {
       this.navBar = this.$conf.navBar
+      this.getRouterBran()
     },
     computed: {
       slideMenuActive: {
@@ -85,6 +94,34 @@
     },
 
     methods: {
+      // 获取面包屑导航
+      getRouterBran() {
+        // 过滤出带name的内容,从路由里面获取内容信息
+        let b = this.$route.matched.filter(v=>v.name)
+        let arr = []
+        b.forEach((v,k)=> {
+          console.log(k)
+          console.log(v)
+          // 过滤layout和index 这个页面不去显示面包屑导航
+          if (v.name === "index" || v.name === "layout") return
+          arr.push({
+            name: v.name,
+            path: v.path,
+            // title: v.meta.title
+            title: v.meta.title || "无title"
+          })
+        })
+        // 如果arr存在,则在数组最前面追加index
+        if (arr.length > 0) {
+          arr.unshift({
+            name: 'index',
+            path: '/index',
+            title: '后台首页'
+          })
+        }
+        this.bran = arr
+        console.log(arr)
+      },
       // 顶部点击 控制台打印输出
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
