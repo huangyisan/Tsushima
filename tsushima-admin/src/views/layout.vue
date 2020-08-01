@@ -32,28 +32,47 @@
         <el-aside width="200px">
           <!-- 侧边栏 -->
           <!-- <li v-for="i in 100" :key="i">{{i}}</li> -->
-          <el-menu default-active="0" @select="slideSelect" style="height:100%">
+          <el-menu :default-active="slideMenuActive" @select="slideSelect" style="height:100%">
             <el-menu-item :index="index|numToString" v-for="(item, index) in slideMenus" :key="index">
               <i :class="item.icon"></i>
               <span slot="title">{{item.name}}</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main>
+        <el-main class="bg-light">
           <!-- 面包屑导航 -->
-          <div class="border-bottom" v-if="bran.length > 0">
-            <el-breadcrumb separator-class="el-icon-arrow-right" style="padding-bottom:20px;">
+          <div class="border-bottom bg-white" v-if="bran.length > 0">
+            <el-breadcrumb separator-class="el-icon-arrow-right" style="padding:20px;">
               <el-breadcrumb-item v-for="(item, index) in bran" :key=index :to="{ path: item.path }">{{item.title}}</el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <!-- 主内容 -->
-          <li v-for="i in 2" :key="i">{{i}}</li>
+          <li v-for="i in 100" :key="i">{{i}}</li>
           <router-view></router-view>
+          <!-- target=作用的对象， 这边也就是把回到顶部作用在el-main上 -->
+            <el-backtop target=".el-main" :bottom="100">
+              <div
+                style="
+                  height: 100%;
+                  width: 100%;
+                  background-color: #f2f5f6;
+                  box-shadow: 0 0 6px rgba(0,0,0, .12);
+                  text-align: center;
+                  line-height: 40px;
+                  color: #1989fa;
+                "
+              >
+                UP
+              </div>
+            </el-backtop>
+
         </el-main>
       </el-container>
     </el-container>
 
-    <!-- <router-view></router-view> -->
+
+
+
   </div>
 </template>
 
@@ -85,6 +104,7 @@
           this.navBar.list[this.navBar.active].subActive = val
         },
         get() {
+          console.log('slidemenu激活')
           console.log(this.navBar.list[this.navBar.active].subActive)
           return this.navBar.list[this.navBar.active].subActive || "0"
 
@@ -121,8 +141,8 @@
           
           this.navBar.active = r.top
           this.slideMenuActive = r.left
-          console.log(this.navBar.active)
-          console.log( this.slideMenuActive)
+          console.log('navBar激活' + this.navBar.active)
+          console.log('sidebar激活' + this.slideMenuActive)
         }
       },
       // 获取面包屑导航
