@@ -47,7 +47,7 @@
             </el-breadcrumb>
           </div>
           <!-- 主内容 -->
-          <li v-for="i in 100" :key="i">{{i}}</li>
+          <!-- <li v-for="i in 100" :key="i">{{i}}</li> -->
           <router-view></router-view>
           <!-- target=作用的对象， 这边也就是把回到顶部作用在el-main上 -->
             <el-backtop target=".el-main" :bottom="100">
@@ -69,10 +69,6 @@
         </el-main>
       </el-container>
     </el-container>
-
-
-
-
   </div>
 </template>
 
