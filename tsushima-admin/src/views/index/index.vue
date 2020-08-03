@@ -35,54 +35,9 @@
             </div>      
           </div>
         </el-card>
-
-        <!-- <el-card class="box-card" shadow="never">
-          <div slot="header" class="clearfix">
-            <span>交易提示</span>
-            <el-button style="float: right; padding: 3px 0" type="text">交易提示</el-button>
-          </div>
-          <div class="row">
-            <div class="col-2">
-              <button class="btn-light btn w-100">
-                <h4 mb-1>50</h4>
-                <small class="text-muted">出售中</small>
-              </button>
-            </div>
-            <div class="col-2">
-              <button class="btn-light btn w-100">
-                <h4 mb-1>50</h4>
-                <small class="text-muted">出售中</small>
-              </button>
-            </div>
-            <div class="col-2">
-              <button class="btn-light btn w-100">
-                <h4 mb-1>50</h4>
-                <small class="text-muted">出售中</small>
-              </button>
-            </div>
-            <div class="col-2">
-              <button class="btn-light btn w-100">
-                <h4 mb-1>50</h4>
-                <small class="text-muted">出售中</small>
-              </button>
-            </div>
-            <div class="col-2">
-              <button class="btn-light btn w-100">
-                <h4 mb-1>50</h4>
-                <small class="text-muted">出售中</small>
-              </button>
-            </div>
-            <div class="col-2">
-              <button class="btn-light btn w-100">
-                <h4 mb-1>50</h4>
-                <small class="text-muted">出售中</small>
-              </button>
-            </div>
-          </div>
-        </el-card>
       </el-col>
 
-       统计图
+       <!-- 统计图 -->
       <el-col :span="12">
         <el-card class="box-card" shadow="never" style="height:370px">
           <div slot="header" class="clearfix">
@@ -90,10 +45,12 @@
             <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
           </div>
           <div class="text item">
-            统计图
+            <!-- ref用来echarts初始化的时候选择该div -->
+            <!-- 统计图 -->
+            <div ref="myChart" style="width:100%;height:270px"></div>
           </div>
             
-        </el-card> -->
+        </el-card> 
       </el-col>
     </el-row>
 
@@ -101,6 +58,9 @@
 </template>
 
 <script>
+// 引入echart
+import echarts from "echarts"
+
 export default {
   data() {
     return {
@@ -150,6 +110,102 @@ export default {
     // 动态获取行数
     getCol(value) {
       return `col-${12 / value}`
+    }
+  },
+
+  // mounted为dom全部渲染完毕后的生命周期
+  mounted() {
+    // 调用methods中drawLine方法进行画图, 因为drawLine需要初始化echarts对象
+    // 且该对象初始化又要用到dom   (this.$refs.myChart), 所以需要放到mounted生命周期函数内.
+    this.drawLine()
+  
+  },
+
+  methods: {
+    // 定义echarts展现方法
+    drawLine() {
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(this.$refs.myChart);
+      myChart.setOption({
+tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        }
+    },
+    legend: {
+        data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [
+        {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '邮件营销',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+            name: '联盟广告',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+            name: '视频广告',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+            name: '直接访问',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+            name: '搜索引擎',
+            type: 'line',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top'
+                }
+            },
+            areaStyle: {},
+            data: [820, 932, 901, 934, 1290, 1330, 1320]
+        }
+    ]
+      })
     }
   }
 }
