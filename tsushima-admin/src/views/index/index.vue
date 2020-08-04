@@ -92,14 +92,30 @@
       <el-col :span="12">
           <el-card class="box-card" shadow="never">
           <div slot="header" class="clearfix">
-            <span>卡片名称</span>
-            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+            <span>单品畅销</span>
+            <el-button style="float: right; padding: 3px 0" type="text">商家统计订单和金额</el-button>
           </div>
           <div class="text item">
-            
-            <!-- ref用来echarts初始化的时候选择该div -->
-            <!-- 统计图 -->
-            <!-- <div ref="myChart" style="width:100%;height:270px"></div> -->
+         <el-table
+          :data="tableData"
+          height="164"
+          border
+          style="width: 100%">
+          <el-table-column
+            type="index"
+            label="#"
+            width="50">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="商品信息"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="sells"
+            label="销量">
+          </el-table-column>
+        </el-table>
           </div>
             
         </el-card> 
@@ -155,6 +171,28 @@ export default {
           ]
         }
       ],
+        tableData: [
+          {
+            name: '雪碧',
+            sells: 1
+          },
+          {
+            name: '可乐',
+            sells: 2
+          },
+          {
+            name: '芬达',
+            sells: 30
+          },
+          {
+            name: '红牛',
+            sells: 14
+          },
+          {
+            name: '椰子汁',
+            sells: 145
+          },
+      ]
     }
   },
   filters: {
