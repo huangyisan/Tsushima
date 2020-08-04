@@ -19,7 +19,13 @@ export default {
             icon: "el-icon-s-claim",
             name: "商品列表",
             pathname: "shop_goods_list"
-          }
+          },
+          {
+            icon: "el-icon-s-claim",
+            name: "相册管理",
+            // 结尾是index,所以只需要填写image,原本是image_index,根据router.js中路径名称来决定,/替换成_
+            pathname: "image"
+          },
         ] 
         
         },

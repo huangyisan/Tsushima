@@ -41,7 +41,8 @@
         </el-aside>
 
         <!-- 主布局 -->
-        <el-main class="bg-light" style="padding-bottom:60px">
+        <!--  定位相对定位, 为了让相册里面 绝对定位拉满,且不会遮挡左边side栏 -->
+        <el-main class="bg-light" style="padding-bottom:60px;  position:relative;">
           <!-- 面包屑导航 -->
           <div class="border-bottom bg-white" v-if="bran.length > 0">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="padding:20px;">
