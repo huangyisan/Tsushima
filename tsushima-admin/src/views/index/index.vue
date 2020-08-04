@@ -1,6 +1,5 @@
 <template>
   <div>
-    后台首页
     <!-- 数据统计 -->
     <el-row :gutter="20">
       <el-col :span="6" v-for="(item, index) in counts" :key="index">
@@ -54,6 +53,58 @@
       </el-col>
     </el-row>
 
+
+      <!-- 销售情况统计 -->
+    <el-row :gutter="20"  class="my-3">
+      <el-col :span="12">
+          <el-card class="box-card" shadow="never">
+          <div slot="header" class="clearfix">
+            <span>卡片名称</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+
+          <!-- 里面使用bootstrap的布局->媒体 -->
+          <div class="media align-items-center border">
+            <span class="py-4 px-3 bg-light border-right">
+              昨日销量
+            </span>
+            <div class="media-body">
+              <div class="border-bottom pl-3 pb-2 pt-1 mb-1"><span>数量0</span></div>
+              <div class="pl-3"><span>数量0</span></div>
+            </div>
+
+          </div>
+
+          <div class="media align-items-center border mt-3">
+            <span class="py-4 px-3 bg-light border-right">
+              昨日销量
+            </span>
+            <div class="media-body">
+              <div class="border-bottom pl-3 pb-2 pt-1 mb-1"><span>数量0</span></div>
+              <div class="pl-3"><span>数量0</span></div>
+            </div>
+
+          </div>
+            
+        </el-card> 
+      </el-col>
+
+      <el-col :span="12">
+          <el-card class="box-card" shadow="never">
+          <div slot="header" class="clearfix">
+            <span>卡片名称</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+          <div class="text item">
+            
+            <!-- ref用来echarts初始化的时候选择该div -->
+            <!-- 统计图 -->
+            <!-- <div ref="myChart" style="width:100%;height:270px"></div> -->
+          </div>
+            
+        </el-card> 
+      </el-col>
+    </el-row>
   </div>
 </template>
 

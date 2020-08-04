@@ -39,7 +39,9 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main class="bg-light">
+
+        <!-- 主布局 -->
+        <el-main class="bg-light" style="padding-bottom:60px">
           <!-- 面包屑导航 -->
           <div class="border-bottom bg-white" v-if="bran.length > 0">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="padding:20px;">
