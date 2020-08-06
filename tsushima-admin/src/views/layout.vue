@@ -171,6 +171,14 @@
       },
       // 顶部点击 控制台打印输出
       handleSelect(key, keyPath) {
+        if (key === "100-1") {
+          console.log("修改资料")
+          return
+        }
+        if (key === "100-2") {
+          console.log("退出登录")
+          return
+        }
         // navbar点击后更新active的值,然后让sildebar根据active得到对应的子栏
         this.navBar.active = key
         // 点击后跳转到激活的左栏第0个
