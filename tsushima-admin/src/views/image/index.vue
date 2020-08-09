@@ -1,4 +1,5 @@
 <template>
+<div>
   <el-container style="position: absolute; top: 74px; bottom: 0; left: 0; right: 0;">
     <el-header  class="d-flex align-items-center border-bottom">
       <div class="d-flex mr-auto">
@@ -12,7 +13,7 @@
         <el-input  size="mini" placeholder="输入相册名称" v-model="searchForm.keyword"></el-input>
         <el-button type="primary" size="mini" >搜索</el-button>
       </div>
-        <el-button type="success" size="medium">创建相册</el-button>
+        <el-button type="success" size="medium" @click="openAlbumModel(false)">创建相册</el-button>
         <el-button type="warning" size="medium">上传图片</el-button>
 
 
@@ -34,8 +35,9 @@
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>修改</el-dropdown-item>
-                  <el-dropdown-item>删除</el-dropdown-item>
+                  <el-dropdown-item @click.stop.native="openAlbumModel({index, item})">修改</el-dropdown-item>
+                  <!-- 事件阻止 + 原生方法 -->
+                  <el-dropdown-item @click.stop.native="albumDel(index)">删除</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </li>
@@ -53,6 +55,32 @@
       </el-container>
     </el-container>
   </el-container>
+
+  <!-- 修改|创建相册 -->
+  <el-dialog title="修改相册" :visible.sync="albumsModel">
+    <el-form :model="albumForm" ref="form" label-width="80px">
+      <el-form-item label="相册名称">
+        <el-input v-model="albumForm.name" size="medium"></el-input>
+      </el-form-item>
+      <el-form-item label="相册排序">
+        <el-input-number v-model="albumForm.order" :min="0" size="medium"></el-input-number>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="albumsModel = false">取 消</el-button>
+      <el-button type="primary" @click="confirmAlbumModel">确 定</el-button>
+    </div>
+  </el-dialog>
+
+
+
+
+  </div>
+
+ 
+
+
+
 </template>
 
 <script>
@@ -64,7 +92,16 @@ export default {
           keyword: ''
         },
         albumIndex: 0,
-        albums: []
+        // 当前编辑相册的索引,默认为-1, 当-1的时候表示为新建相册, 如果大于-1,则为编辑
+        albumEditIndex: -1,
+        albums: [],
+        // albums是否课件
+        albumsModel: false,
+        // albumForm
+        albumForm: {
+          name: "",
+          order: 0
+        }
       }
     },
     created() {
@@ -83,7 +120,80 @@ export default {
       },
       albumChange(index) {
         this.albumIndex = index
-      }
+      },
+      albumDel(index) {
+
+        this.$confirm('是否删除该相册?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          // 删除选定的相册
+          this.albums.splice(index,1)
+
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
+      //打开|创建相册修改框 ,如果obj为空,则是创建, 有值则修改
+      openAlbumModel(obj){
+        // 修改
+        if (obj) {
+          //结构出obj数据
+          let {item, index} = obj
+          // 初始化表单
+          this.albumForm.name = item.name
+          this.albumForm.order = item.order
+          this.albumEditIndex = index
+          // 打开模态框
+          this.albumsModel = true
+          // 结束
+          return
+        }
+        // 如果是创建相册创建相册
+        this.albumForm = {
+          name: "",
+          order: 0,
+        }
+        // 将albumEditIndex置为-1
+        this.albumEditIndex = -1
+        // 打开模态框
+        this.albumsModel = true
+
+      },
+      // 点"确定"修改|创建相册框
+      confirmAlbumModel() {
+        // 判断是否为修改还是创建
+        if (this.albumEditIndex > -1) {
+          this.albumEdit();
+          this.albumsModel = false
+          // 结束修改,如果用else来处理下面创建情况,则不需要return
+          return
+        }
+        // 创建的情况
+        // unshift, 在左侧追加对象
+        this.albums.unshift({
+          name: this.albumForm.name,
+          order: this.albumForm.order,
+          num: 0
+        })
+        this.albumsModel = false
+      },
+
+      albumEdit() {
+        // 从albumEditIndex得到当前索引
+        this.albums[this.albumEditIndex].name = this.albumForm.name
+        this.albums[this.albumEditIndex].order = this.albumForm.order
+        // 关闭
+        
+      },
     }
   }
 </script>
