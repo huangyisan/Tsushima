@@ -19,16 +19,26 @@
 
     </el-header>
     <el-container>
-      <el-aside width="200px" style="position: absolute; top:60px; left:0; bottom: 60px">
+      <el-aside width="200px" style="position: absolute; top:60px; left:0; bottom: 60px" class="bg-write border-right">
       <!-- <el-aside width="200px"> -->
         <div style="height: 1000px">
           <!-- 侧边相册列表 -->
           <ul class="list-group list-group-flush">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
+            <!-- 当前选中索引是否等于激活的索引, 如果为真,则加入active这个class样式 -->
+            <li class="list-group-item list-group-item-action d-flex align-items-center" v-for="(item,index) in albums" :key="index"
+            @click="albumChange(index)" :class="{'active': albumIndex === index}" style="cursor:pointer">
+              {{item.name}}
+              <el-dropdown class="ml-auto">
+                <span class="btn btn-light btn-sm border">
+                  {{item.num}}
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>修改</el-dropdown-item>
+                  <el-dropdown-item>删除</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </li>
           </ul>
         </div>
       </el-aside>
@@ -49,11 +59,30 @@
 export default {
     data() {
       return {
-        searchForm: [{
-          order: '选项1',
-          keyword: '黄金糕'
-        }],
-        value: ''
+        searchForm: {
+          order: '',
+          keyword: ''
+        },
+        albumIndex: 0,
+        albums: []
+      }
+    },
+    created() {
+      this.__init()
+    },
+    methods: {
+      __init(){
+        for (let i = 0; i< 20; i++) {
+          this.albums.push({
+            name: '相册名称'+i,
+            num: Math.floor(Math.random()*100),
+            order: 0
+
+          })
+        }
+      },
+      albumChange(index) {
+        this.albumIndex = index
       }
     }
   }
