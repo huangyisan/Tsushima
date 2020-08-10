@@ -40,7 +40,22 @@
       <el-container>
         <el-main style="position: absolute; top:60px; left:200px; bottom: 60px; right:0">
         <!-- <el-main> -->
-          <div style="height: 1000px" >main</div>
+          <!-- <div style="height: 1000px" >main</div> -->
+
+          <el-row :gutter=10>
+            <el-col  :lg="4" :md="6" :sm="8" v-for="i in 10" :key="i">
+              <!-- 子绝父相, 让蒙版能遮挡一些图片 -->
+              <el-card class="box-card mb-3" :body-style="{'padding':'0'}" style="position:relative">
+                <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg" alt="" class="w-100" style="height:100px">
+                <!-- 图片标题蒙版 子绝父相 -->
+                <div class="w-100 text-white" style="background: rgba(0,0,0,0.5); margin-top: -20px; position:absolute">
+                  123
+                </div>
+              </el-card>
+            </el-col>
+
+
+          </el-row>
         </el-main>
         <el-footer  style="position: absolute; bottom: 0px; right:0; left:0;">
           Footer
