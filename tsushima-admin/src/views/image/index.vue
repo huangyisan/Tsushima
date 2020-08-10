@@ -45,11 +45,18 @@
           <el-row :gutter=10>
             <el-col  :lg="4" :md="6" :sm="8" v-for="i in 10" :key="i">
               <!-- 子绝父相, 让蒙版能遮挡一些图片 -->
-              <el-card class="box-card mb-3" :body-style="{'padding':'0'}" style="position:relative">
+              <el-card class="box-card mb-3 position-relative" :body-style="{'padding':'0'}" style="cursor:pointer" shadow="hover">
                 <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg" alt="" class="w-100" style="height:100px">
                 <!-- 图片标题蒙版 子绝父相 -->
-                <div class="w-100 text-white" style="background: rgba(0,0,0,0.5); margin-top: -20px; position:absolute">
+                <div class="w-100 text-white" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
                   123
+                </div>
+                <div  class="p-2 text-center"> 
+                  <el-button-group>
+                    <el-button icon="el-icon-view" size="mini" class="p-2"></el-button>
+                    <el-button icon="el-icon-edit" size="mini" class="p-2"></el-button>
+                    <el-button icon="el-icon-delete" size="mini" class="p-2"></el-button>
+                  </el-button-group>
                 </div>
               </el-card>
             </el-col>

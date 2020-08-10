@@ -29,7 +29,7 @@
       <!-- header占了60px,所以侧边栏被占用了60px, 底部给padding-bottom 60px,  height:100%是给滚动效果 -->
       <!-- <el-container style="height:100%; padding-bottom:60px;"> -->
       <el-container style="height:100%;">
-        <el-aside width="200px">
+        <el-aside width="180px">
           <!-- 侧边栏 -->
           <!-- <li v-for="i in 100" :key="i">{{i}}</li> -->
           <el-menu :default-active="slideMenuActive" @select="slideSelect" style="height:100%">
