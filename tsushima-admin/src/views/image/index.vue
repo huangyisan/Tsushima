@@ -14,7 +14,7 @@
         <el-button type="primary" size="mini" >搜索</el-button>
       </div>
         <el-button type="success" size="medium" @click="openAlbumModel(false)">创建相册</el-button>
-        <el-button type="warning" size="medium">上传图片</el-button>
+        <el-button type="warning" size="medium" @click="uploadModel = true">上传图片</el-button>
 
 
 
@@ -50,7 +50,7 @@
   </el-container>
 
   <!-- 修改|创建相册 -->
-  <el-dialog :title="albumModelTitle()" :visible.sync="albumsModel">
+  <el-dialog :title="albumModelTitle" :visible.sync="albumsModel">
     <el-form :model="albumForm" ref="form" label-width="80px">
       <el-form-item label="相册名称">
         <el-input v-model="albumForm.name" size="medium"></el-input>
@@ -65,15 +65,21 @@
     </div>
   </el-dialog>
 
-
-
-
+  <!-- 图片上传 -->
+  <el-dialog title="图片上传" :visible.sync="uploadModel">
+    <div class="text-center">
+      <el-upload
+        class="upload-demo"
+        drag
+        action="https://jsonplaceholder.typicode.com/posts/"
+        multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
+    </div>
+  </el-dialog>
   </div>
-
- 
-
-
-
 </template>
 
 <script>
@@ -104,7 +110,9 @@ export default {
       albumForm: {
         name: "",
         order: 0
-      }
+      },
+      // 图片上传
+      uploadModel: false
     }
   },
   created() {
