@@ -50,7 +50,7 @@
   </el-container>
 
   <!-- 修改|创建相册 -->
-  <el-dialog title="修改相册" :visible.sync="albumsModel">
+  <el-dialog :title="albumModelTitle()" :visible.sync="albumsModel">
     <el-form :model="albumForm" ref="form" label-width="80px">
       <el-form-item label="相册名称">
         <el-input v-model="albumForm.name" size="medium"></el-input>
@@ -81,6 +81,11 @@ import albumItem from '@/components/image/album-item'
 export default {
   components: {
     albumItem
+  },
+  computed: {
+    albumModelTitle() {
+      return this.albumEditIndex > -1 ? "修改相册" : "创建相册"
+    }
   },
 
   data() {
