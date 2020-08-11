@@ -53,7 +53,7 @@
                 </div>
                 <div  class="p-2 text-center"> 
                   <el-button-group>
-                    <el-button icon="el-icon-view" size="mini" class="p-2"></el-button>
+                    <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage"></el-button>
                     <el-button icon="el-icon-edit" size="mini" class="p-2"></el-button>
                     <el-button icon="el-icon-delete" size="mini" class="p-2"></el-button>
                   </el-button-group>
@@ -101,6 +101,18 @@
       </el-upload>
     </div>
   </el-dialog>
+
+  <!-- 使用模态框实现图片预览 -->
+  <!-- width="60vw" 横向为视口的50%  距离top为5%的vh-->
+  <el-dialog title="预览" :visible.sync="previewModel" width="50vw" top="5vh">
+    <!-- 移除图片四周的padding 根据查看未移除之前盒模型的大小,top部分包含了原先 "移除"字样所占用的所有空间为 20+10+24-->
+    <div style="margin: -84px -20px -30px -20px">
+      <!-- <div> -->
+      <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg" alt="" class="w-100">
+    </div>
+  </el-dialog>
+
+
   </div>
 </template>
 
@@ -134,7 +146,9 @@ export default {
         order: 0
       },
       // 图片上传
-      uploadModel: false
+      uploadModel: false,
+      // 默认关闭图片预览
+      previewModel: false,
     }
   },
   created() {
@@ -227,6 +241,10 @@ export default {
       // 关闭
       
     },
+    // 预览图片
+    previewImage() {
+      this.previewModel = true
+    }
   }
 }
 </script>
