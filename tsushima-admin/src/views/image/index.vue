@@ -48,13 +48,13 @@
               <el-card class="box-card mb-3 position-relative" :body-style="{'padding':'0'}" style="cursor:pointer" shadow="hover">
                 <img :src="item.url" alt="" class="w-100" style="height:100px">
                 <!-- 图片标题蒙版 子绝父相 -->
-                <div class="w-100 text-white" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
-                  {{item.name}}
+                <div class="w-100 text-white px-1" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
+                  <span class="small">{{item.name}}</span>
                 </div>
                 <div  class="p-2 text-center"> 
                   <el-button-group>
                     <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage(item.url)"></el-button>
-                    <el-button icon="el-icon-edit" size="mini" class="p-2"></el-button>
+                    <el-button icon="el-icon-edit" size="mini" class="p-2" @click="imageEdit(item,index)"></el-button>
                     <el-button icon="el-icon-delete" size="mini" class="p-2"></el-button>
                   </el-button-group>
                 </div>
@@ -252,7 +252,29 @@ export default {
     previewImage(url) {
       this.previewUrl = url
       this.previewModel = true
-    }
+    },
+    // 修改图片名称
+    imageEdit(item,index) {
+      this.$prompt('请输入新名称', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        // 初始值
+        inputValue: item.name,
+        inputValidator(val) {
+          if (val === '') {
+            return '图片名称不能为空'
+          }
+        }
+      }).then(({ value }) => {
+       item.name = value
+       this.$message(
+         {
+           message: "修改成功",
+           type: 'success'
+         }
+       )
+      })
+    },
   }
 }
 </script>
