@@ -43,17 +43,17 @@
           <!-- <div style="height: 1000px" >main</div> -->
 
           <el-row :gutter=10>
-            <el-col  :lg="4" :md="6" :sm="8" v-for="i in 10" :key="i">
+            <el-col  :lg="4" :md="6" :sm="8" v-for="(item,index) in imageList" :key="index">
               <!-- 子绝父相, 让蒙版能遮挡一些图片 -->
               <el-card class="box-card mb-3 position-relative" :body-style="{'padding':'0'}" style="cursor:pointer" shadow="hover">
-                <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg" alt="" class="w-100" style="height:100px">
+                <img :src="item.url" alt="" class="w-100" style="height:100px">
                 <!-- 图片标题蒙版 子绝父相 -->
                 <div class="w-100 text-white" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
-                  123
+                  {{item.name}}
                 </div>
                 <div  class="p-2 text-center"> 
                   <el-button-group>
-                    <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage"></el-button>
+                    <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage(item.url)"></el-button>
                     <el-button icon="el-icon-edit" size="mini" class="p-2"></el-button>
                     <el-button icon="el-icon-delete" size="mini" class="p-2"></el-button>
                   </el-button-group>
@@ -108,7 +108,7 @@
     <!-- 移除图片四周的padding 根据查看未移除之前盒模型的大小,top部分包含了原先 "移除"字样所占用的所有空间为 20+10+24-->
     <div style="margin: -84px -20px -30px -20px">
       <!-- <div> -->
-      <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg" alt="" class="w-100">
+      <img :src="previewUrl" alt="" class="w-100">
     </div>
   </el-dialog>
 
@@ -149,6 +149,13 @@ export default {
       uploadModel: false,
       // 默认关闭图片预览
       previewModel: false,
+      previewUrl: "",
+      imageList: [
+        {
+          url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg",
+          name: "图片",
+        }
+      ]
     }
   },
   created() {
@@ -242,7 +249,8 @@ export default {
       
     },
     // 预览图片
-    previewImage() {
+    previewImage(url) {
+      this.previewUrl = url
       this.previewModel = true
     }
   }
