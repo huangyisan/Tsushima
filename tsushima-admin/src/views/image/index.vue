@@ -55,7 +55,7 @@
                   <el-button-group>
                     <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage(item.url)"></el-button>
                     <el-button icon="el-icon-edit" size="mini" class="p-2" @click="imageEdit(item,index)"></el-button>
-                    <el-button icon="el-icon-delete" size="mini" class="p-2"></el-button>
+                    <el-button icon="el-icon-delete" size="mini" class="p-2" @click="imageDel(index)"></el-button>
                   </el-button-group>
                 </div>
               </el-card>
@@ -275,6 +275,20 @@ export default {
        )
       })
     },
+    imageDel(index) {
+       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.imageList.splice(index,1)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        })
+      
+    }
   }
 }
 </script>
