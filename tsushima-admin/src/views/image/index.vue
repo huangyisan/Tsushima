@@ -15,9 +15,6 @@
       </div>
         <el-button type="success" size="medium" @click="openAlbumModel(false)">创建相册</el-button>
         <el-button type="warning" size="medium" @click="uploadModel = true">上传图片</el-button>
-
-
-
     </el-header>
     <el-container>
       <el-aside width="200px" style="position: absolute; top:60px; left:0; bottom: 60px" class="bg-write border-right">
@@ -46,17 +43,23 @@
             <el-col  :lg="4" :md="6" :sm="8" v-for="(item,index) in imageList" :key="index">
               <!-- 子绝父相, 让蒙版能遮挡一些图片 -->
               <el-card class="box-card mb-3 position-relative" :body-style="{'padding':'0'}" style="cursor:pointer" shadow="hover">
-                <img :src="item.url" alt="" class="w-100" style="height:100px">
-                <!-- 图片标题蒙版 子绝父相 -->
-                <div class="w-100 text-white px-1" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
-                  <span class="small">{{item.name}}</span>
-                </div>
-                <div  class="p-2 text-center"> 
-                  <el-button-group>
-                    <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage(item.url)"></el-button>
-                    <el-button icon="el-icon-edit" size="mini" class="p-2" @click="imageEdit(item,index)"></el-button>
-                    <el-button icon="el-icon-delete" size="mini" class="p-2" @click="imageDel(index)"></el-button>
-                  </el-button-group>
+                <!-- 选中图片出现边框 -->
+                <div class="border border-danger">
+                  <el-tag type="danger" effect="dark" style="position: absolute; top: 0; right: 0" size="mini">
+                    1
+                  </el-tag>
+                  <img :src="item.url" alt="" class="w-100" style="height:100px" @click="choose(item)">
+                  <!-- 图片标题蒙版 子绝父相 -->
+                  <div class="w-100 text-white px-1" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
+                    <span class="small">{{item.name}}</span>
+                  </div>
+                  <div  class="p-2 text-center"> 
+                    <el-button-group>
+                      <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage(item.url)"></el-button>
+                      <el-button icon="el-icon-edit" size="mini" class="p-2" @click="imageEdit(item,index)"></el-button>
+                      <el-button icon="el-icon-delete" size="mini" class="p-2" @click="imageDel(index)"></el-button>
+                    </el-button-group>
+                  </div>
                 </div>
               </el-card>
             </el-col>
@@ -154,6 +157,7 @@ export default {
         {
           url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg",
           name: "图片",
+          ischeck: false,
         }
       ]
     }
@@ -162,6 +166,11 @@ export default {
     this.__init()
   },
   methods: {
+    choose(item) {
+      item.ischeck = !item.ischeck
+
+    },
+
     __init(){
       for (let i = 0; i< 20; i++) {
         this.albums.push({
