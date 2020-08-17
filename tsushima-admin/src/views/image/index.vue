@@ -44,10 +44,15 @@
               <!-- 子绝父相, 让蒙版能遮挡一些图片 -->
               <el-card class="box-card mb-3 position-relative" :body-style="{'padding':'0'}" style="cursor:pointer" shadow="hover">
                 <!-- 选中图片出现边框 -->
-                <div class="border border-danger">
-                  <el-tag type="danger" effect="dark" style="position: absolute; top: 0; right: 0" size="mini">
+                <div :class="{'border border-danger' : item.ischeck}">
+                  <!-- !!使用原生的标签有助于提高性能,所以不再使用el-tag,而是使用bs提供的的badge -->
+                  <!-- <el-tag v-if="item.ischeck" type="danger" effect="dark" style="position: absolute; top: 0; right: 0" size="mini">
                     1
-                  </el-tag>
+                  </el-tag> -->
+                  <!-- 使用bs提供的badge -->
+                  <span v-if="item.ischeck" class="badge badge-danger" style="position: absolute; top: 0; right: 0">
+                    1
+                  </span>
                   <img :src="item.url" alt="" class="w-100" style="height:100px" @click="choose(item)">
                   <!-- 图片标题蒙版 子绝父相 -->
                   <div class="w-100 text-white px-1" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
@@ -153,13 +158,7 @@ export default {
       // 默认关闭图片预览
       previewModel: false,
       previewUrl: "",
-      imageList: [
-        {
-          url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg",
-          name: "图片",
-          ischeck: false,
-        }
-      ]
+      imageList: []
     }
   },
   created() {
@@ -179,6 +178,16 @@ export default {
           order: 0
 
         })
+      };
+      for (let i = 0; i< 20; i++) {
+        this.imageList.push(
+          { 
+            id: i,
+            url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg",
+            name: "图片",
+            ischeck: false,
+          }
+        )
       }
     },
     albumChange(index) {
