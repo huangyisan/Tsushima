@@ -55,7 +55,7 @@
                   <span v-if="item.ischeck" class="badge badge-danger" style="position: absolute; top: 0; right: 0">
                     {{item.id+1}}
                   </span>
-                  <img :src="item.url" alt="" class="w-100" style="height:100px" @click="choose(item)">
+                  <img :src="item.url" alt="" class="w-100" @click="choose(item)">
                   <!-- 图片标题蒙版 子绝父相 -->
                   <div class="w-100 text-white px-1" style="background: rgba(0,0,0,0.5); margin-top: -25px; position:absolute">
                     <span class="small">{{item.name}}</span>
@@ -164,7 +164,7 @@ export default {
       border_transparent: 'my-border-transparent',
       border_danger: 'my-border-danger',
       chooseList: [],
-      
+
     }
   },
   created() {
@@ -192,6 +192,7 @@ export default {
             url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg",
             name: "图片",
             ischeck: false,
+            checkOrder: 0
           }
         )
       }
