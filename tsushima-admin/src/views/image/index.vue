@@ -44,14 +44,16 @@
               <!-- 子绝父相, 让蒙版能遮挡一些图片 -->
               <el-card class="box-card mb-3 position-relative" :body-style="{'padding':'0'}" style="cursor:pointer" shadow="hover">
                 <!-- 选中图片出现边框 -->
-                <div :class="{'border border-danger' : item.ischeck}">
+                <!-- <div :class="{'border-left border-danger' : item.ischeck}"> -->
+                  <!-- 全部给添加border,如果没选定,则是透明边框 -->
+                <div :class="item.ischeck?border_danger:border_transparent">
                   <!-- !!使用原生的标签有助于提高性能,所以不再使用el-tag,而是使用bs提供的的badge -->
                   <!-- <el-tag v-if="item.ischeck" type="danger" effect="dark" style="position: absolute; top: 0; right: 0" size="mini">
                     1
                   </el-tag> -->
                   <!-- 使用bs提供的badge -->
                   <span v-if="item.ischeck" class="badge badge-danger" style="position: absolute; top: 0; right: 0">
-                    1
+                    {{item.id+1}}
                   </span>
                   <img :src="item.url" alt="" class="w-100" style="height:100px" @click="choose(item)">
                   <!-- 图片标题蒙版 子绝父相 -->
@@ -158,7 +160,11 @@ export default {
       // 默认关闭图片预览
       previewModel: false,
       previewUrl: "",
-      imageList: []
+      imageList: [],
+      border_transparent: 'my-border-transparent',
+      border_danger: 'my-border-danger',
+      chooseList: [],
+      
     }
   },
   created() {
@@ -325,5 +331,14 @@ export default {
   .el-main {
     background-color: #E9EEF3;
     color: #333;
+  }
+  .my-border-transparent {
+    box-sizing:border-box;
+    border: solid 1px transparent;
+
+  }
+  .my-border-danger {
+    box-sizing:border-box;
+    border: solid 1px red;
   }
 </style>
