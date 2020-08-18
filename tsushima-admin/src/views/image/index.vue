@@ -182,12 +182,36 @@ export default {
         item.checkOrder = this.chooseList.length
         // 修改状态
         item.ischeck = true
-      } else {
-        item.ischeck = !item.ischeck
+        return
       }
-     
-      
+      // 已经选中图片的情况,再次点击则
+      // 1. 修改状态
+      item.ischeck = false
+      // 2. 重置序号
+      item.checkOrder = 0
+      // 3.取消选中
+      // 4. 查找到chooseList中的索引,并删除
+      let i = this.chooseList.findIndex(v=>v.id === item.id)
+      // 找不到则直接返回
+      if (i === -1) return
+      // 找到情况下
+      // 4.1 重新计算序号, 如果取消选择是chooseList最后一个,则不需要重新计算
+      let length = this.chooseList.length
+      // 不是最后一个的情况. 
+      if ( i < length - 1) {
+        // 修改i到末尾的序号
+        for (let j=i; j<length;j++) {
+          // 先尝试找到imageList中的位置
+          let no = this.imageList.findIndex(v=>v.id === this.chooseList[j].id)
+          // 找到的情况,则将对应的image的checkOrder -1
+          if ( no !== -1) {
+            this.imageList[no].checkOrder -= 1
+          }
 
+        }
+      }
+      // 4.2 找到则删除
+      this.chooseList.splice(i, 1)
     },
 
     __init(){
