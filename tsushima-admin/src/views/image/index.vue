@@ -53,7 +53,7 @@
                   </el-tag> -->
                   <!-- 使用bs提供的badge -->
                   <span v-if="item.ischeck" class="badge badge-danger" style="position: absolute; top: 0; right: 0">
-                    {{item.id+1}}
+                    {{item.checkOrder}}
                   </span>
                   <img :src="item.url" alt="" class="w-100" @click="choose(item)">
                   <!-- 图片标题蒙版 子绝父相 -->
@@ -172,7 +172,21 @@ export default {
   },
   methods: {
     choose(item) {
-      item.ischeck = !item.ischeck
+      if (!item.ischeck) {
+        // 加入选中的图片
+        this.chooseList.push({
+          id: item.id,
+          url: item.url
+        })
+        // 计算序号
+        item.checkOrder = this.chooseList.length
+        // 修改状态
+        item.ischeck = true
+      } else {
+        item.ischeck = !item.ischeck
+      }
+     
+      
 
     },
 
