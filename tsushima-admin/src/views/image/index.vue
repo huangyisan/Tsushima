@@ -14,7 +14,7 @@
         <el-button type="primary" size="mini" >搜索</el-button>
       </div>
       <!-- 选中后,出现批量删除的按钮 -->
-        <el-button type="danger" size="medium" @click="imageDelAll" v-if="chooseList.length">批量删除</el-button>
+        <el-button type="danger" size="medium" @click="imageDel({all:true})" v-if="chooseList.length">批量删除</el-button>
         <el-button type="success" size="medium" @click="openAlbumModel(false)">创建相册</el-button>
         <el-button type="warning" size="medium" @click="uploadModel = true">上传图片</el-button>
     </el-header>
@@ -66,7 +66,7 @@
                     <el-button-group>
                       <el-button icon="el-icon-view" size="mini" class="p-2" @click="previewImage(item.url)"></el-button>
                       <el-button icon="el-icon-edit" size="mini" class="p-2" @click="imageEdit(item,index)"></el-button>
-                      <el-button icon="el-icon-delete" size="mini" class="p-2" @click="imageDel(index)"></el-button>
+                      <el-button icon="el-icon-delete" size="mini" class="p-2" @click="imageDel({index})"></el-button>
                     </el-button-group>
                   </div>
                 </div>
@@ -340,31 +340,32 @@ export default {
        )
       })
     },
-    imageDel(index) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    imageDel(object) {
+      this.$confirm(object.all?'批量删除选定文件, 是否继续?':'删除该图片, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.imageList.splice(index,1)
+        if (object.all) {
+          let list = this.imageList.filter(img => {
+            // some表示判断列表内符合条件的,则返回true, 符合的为需要被删除的, 所以取反为去除删除的部分.
+            return !this.chooseList.some(v=> {
+              return v.id === img.id
+            })
+          })
+          // 重新赋值给image list
+          this.imageList = list
+          // 清空chooseList
+          this.chooseList = []
+        } else {
+          this.imageList.splice(object.index,1)
+        }
         this.$message({
           type: 'success',
           message: '删除成功!'
         });
       })
     },
-    imageDelAll() {
-      let list = this.imageList.filter(img => {
-        // some表示判断列表内符合条件的,则返回true, 符合的为需要被删除的, 所以取反为去除删除的部分.
-        return !this.chooseList.some(v=> {
-          return v.id === img.id
-        })
-      })
-      // 重新赋值给image list
-      this.imageList = list
-      // 清空chooseList
-      this.chooseList = []
-    }
   }
 }
 </script>
