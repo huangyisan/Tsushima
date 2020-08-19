@@ -13,6 +13,8 @@
         <el-input  size="mini" placeholder="输入相册名称" v-model="searchForm.keyword"></el-input>
         <el-button type="primary" size="mini" >搜索</el-button>
       </div>
+      <!-- 选中后,出现批量删除的按钮 -->
+        <el-button type="danger" size="medium" @click="imageDelAll" v-if="chooseList.length">批量删除</el-button>
         <el-button type="success" size="medium" @click="openAlbumModel(false)">创建相册</el-button>
         <el-button type="warning" size="medium" @click="uploadModel = true">上传图片</el-button>
     </el-header>
@@ -228,7 +230,7 @@ export default {
           { 
             id: i,
             url:"https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1906469856,4113625838&fm=26&gp=0.jpg",
-            name: "图片",
+            name: "图片" + i,
             ischeck: false,
             checkOrder: 0
           }
@@ -339,18 +341,29 @@ export default {
       })
     },
     imageDel(index) {
-       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.imageList.splice(index,1)
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.imageList.splice(index,1)
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      })
+    },
+    imageDelAll() {
+      let list = this.imageList.filter(img => {
+        // some表示判断列表内符合条件的,则返回true, 符合的为需要被删除的, 所以取反为去除删除的部分.
+        return !this.chooseList.some(v=> {
+          return v.id === img.id
         })
-      
+      })
+      // 重新赋值给image list
+      this.imageList = list
+      // 清空chooseList
+      this.chooseList = []
     }
   }
 }
